@@ -61,7 +61,7 @@ function desenhar_processo(i, j, indice_do_processo){
 
 function desenhar_processos(){
 
-	// FIFO
+	// Round-robin
 
 	// Indice do processo
 	let indice = 0
@@ -71,17 +71,21 @@ function desenhar_processos(){
 
 
 	while(processos.reduce(reducer) != 0){
-		// desenha o processo na tabela e reduz o tempo ja computado 
-		desenhar_processo(indicejanela, indice, indice)
-		processos[indice] -= quantum
-
-		// se o processo terminou de ser computado, seguiremos em frente
-		if(processos[indice] == 0){
-			indice ++
+		//verifico primeiro se o valor da posicao do indice e difirente de 0
+		if(processos[indice]!=0){
+			desenhar_processo(indicejanela, indice, indice)
+			processos[indice] -= quantum
+			if(indice == processos.length-1){ // verifico se ja estou no final do array, caso esteja, volta pro comeco
+				indice=0
+			}else{ // caso nao esteja no final do array, adiciono 1 ao indice
+				indice ++
+			}
+			indicejanela++ // so adiciono ao indicejanela caso alguma operacao tenha sido feita no quantum
+		}else if(indice == processos.length-1){ //se o valor armazenado em processos[indice] for 0 e for o ultimo do array, ele retorna pro comeco
+			indice = 0
+		}else{ // se for 0 e nao for o ultimo, apenas adiciono 1 ao indice
+			indice++
 		}
-
-		// a cada rodada do while, devemos incrementar a etapa de computacao
-		indicejanela++
 	}
 
 }
